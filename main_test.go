@@ -32,8 +32,8 @@ func Test_maximum(t *testing.T) {
 		data []int
 		want int
 	}{
-		{name: "Zero len of slice", data: []int{}, want: -1},
-		{name: "Send nil slice", data: nil, want: -1},
+		{name: "Zero len of slice", data: []int{}, want: 0},
+		{name: "Send nil slice", data: nil, want: 0},
 		{name: "One element in slice: zero", data: []int{0}, want: 0},
 		{name: "One element in slice: positive number", data: []int{1}, want: 1},
 		{name: "Small slice: positive numbers", data: []int{2, 5, 3, 1, 10, 8}, want: 10},
@@ -53,8 +53,8 @@ func Test_maxChunks(t *testing.T) {
 		data []int
 		want int
 	}{
-		{name: "Zero len of slice", data: []int{}, want: -1},
-		{name: "Send nil slice", data: nil, want: -1},
+		{name: "Zero len of slice", data: []int{}, want: 0},
+		{name: "Send nil slice", data: nil, want: 0},
 		{name: "One element in slice: zero", data: []int{0}, want: 0},
 		{name: "One element in slice: positive number", data: []int{1}, want: 1},
 		{name: "Small slice: positive numbers", data: []int{2, 5, 3, 1, 10, 8}, want: 10},

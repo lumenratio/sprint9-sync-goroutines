@@ -15,14 +15,14 @@ const (
 // generateRandomElements generates random elements.
 func generateRandomElements(size int) []int {
 	// ваш код здесь
-	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 	if size <= 0 {
 		return nil
 	}
 
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 	numbers := make([]int, 0, size)
 	for i := 0; i < size; i++ {
-		numbers = append(numbers, int(rnd.Int63()))
+		numbers = append(numbers, rnd.Int())
 	}
 	return numbers
 }
@@ -31,7 +31,7 @@ func generateRandomElements(size int) []int {
 func maximum(data []int) int {
 	// ваш код здесь
 	if len(data) == 0 {
-		return -1
+		return 0
 	}
 	if len(data) == 1 {
 		return data[0]
@@ -51,16 +51,15 @@ func maxChunks(data []int) int {
 	// ваш код здесь
 	// check data parameters
 	if len(data) == 0 {
-		return -1
+		return 0
 	}
 
 	if len(data) == 1 {
 		return data[0]
 	}
 
-	var mu sync.Mutex
 	// slice for results from goroutines
-	var chunksResults []int
+	chunksResults := make([]int, CHUNKS)
 	var wg sync.WaitGroup
 	// ok, lets chunk data and run goroutines
 	for i := 0; i < CHUNKS; i++ {
@@ -68,13 +67,11 @@ func maxChunks(data []int) int {
 		end := ((i + 1) * len(data)) / CHUNKS
 		chunk := data[start:end]
 		wg.Add(1)
-		go func() {
+		go func(chunk []int, i int) {
 			defer wg.Done()
 			max := maximum(chunk)
-			mu.Lock()
-			chunksResults = append(chunksResults, max)
-			mu.Unlock()
-		}()
+			chunksResults[i] = max
+		}(chunk, i)
 	}
 	wg.Wait()
 	//wait when goroutine that collecting results, complete
@@ -92,7 +89,7 @@ func main() {
 	fmt.Println("Ищем максимальное значение в один поток")
 	start := time.Now()
 	max := maximum(rndNumbers)
-	if max == -1 {
+	if max == 0 {
 		return
 	}
 	elapsed := time.Since(start)
@@ -103,7 +100,7 @@ func main() {
 	// ваш код здесь
 	start = time.Now()
 	max = maxChunks(rndNumbers)
-	if max == -1 {
+	if max == 0 {
 		return
 	}
 	elapsed = time.Since(start)
